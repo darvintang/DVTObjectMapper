@@ -16,11 +16,7 @@ let package = Package(
             name: "DVTObjectMapper",
             targets: ["DVTObjectMapper"]),
     ],
-    
-    dependencies: [
-        .package(url: "https://github.com/tristanhimmelman/ObjectMapper.git", .upToNextMajor(from: "4.1.0"))
-    ],
-    
+
     targets: [
         .target(
             name: "DVTObjectMapper",

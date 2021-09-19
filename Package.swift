@@ -5,20 +5,23 @@ import PackageDescription
 
 let package = Package(
     name: "DVTObjectMapper",
+
+    platforms: [.macOS(.v10_10),
+                .iOS(.v10),
+                .tvOS(.v9),
+                .watchOS(.v2)],
+
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "DVTObjectMapper",
             targets: ["DVTObjectMapper"]),
     ],
+    
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/tristanhimmelman/ObjectMapper.git", .upToNextMajor(from: "4.1.0"))
     ],
     
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "DVTObjectMapper",
             path: "Sources"),
@@ -28,5 +31,7 @@ let package = Package(
         .testTarget(
             name: "ObjectMapperTests",
             dependencies: ["DVTObjectMapper"]),
-    ]
+    ],
+
+    swiftLanguageVersions: [.v5]
 )

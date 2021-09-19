@@ -1,12 +1,3 @@
-//
-//  ExpressibleByBooleanLiteralTests.swift
-//
-//
-//  Created by darvintang on 2021/9/19.
-//
-
-import Foundation
-
 @testable import DVTObjectMapper
 import XCTest
 
@@ -40,24 +31,25 @@ struct TestSrtBool: Mappable {
     }
 }
 
-final class ExpressibleByBooleanLiteralTests: XCTestCase {
+final class BoolTests: XCTestCase {
     func test() throws {
         let dataClsSource = TestClsBool(JSONString: """
         {"intToBool":1,"stringToBool":"YES","nilToBool":null}
         """)
         XCTAssert(dataClsSource?.intToBool != nil)
-        XCTAssert(dataClsSource?.intToBool == true)
+        XCTAssertEqual(dataClsSource?.intToBool, true)
         XCTAssert(dataClsSource?.stringToBool != nil)
-        XCTAssert(dataClsSource?.stringToBool == true)
+        XCTAssertEqual(dataClsSource?.stringToBool, true)
         XCTAssert(dataClsSource?.nilToBool == nil)
 
         let dataSrtSource = TestSrtBool(JSONString: """
         {"intToBool":1,"stringToBool":"true","nilToBool":null}
         """)
+
         XCTAssert(dataSrtSource?.intToBool != nil)
-        XCTAssert(dataSrtSource?.intToBool == true)
+        XCTAssertEqual(dataSrtSource?.intToBool, true)
         XCTAssert(dataSrtSource?.stringToBool != nil)
-        XCTAssert(dataSrtSource?.stringToBool == true)
+        XCTAssertEqual(dataSrtSource?.stringToBool, true)
         XCTAssert(dataSrtSource?.nilToBool == nil)
     }
 }

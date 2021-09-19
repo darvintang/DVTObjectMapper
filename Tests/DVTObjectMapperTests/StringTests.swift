@@ -35,23 +35,31 @@ struct TestSrtString: Mappable {
     }
 }
 
-final class ExpressibleByStringLiteralTests: XCTestCase {
+final class StringTests: XCTestCase {
     func test() throws {
         let dataClsSource = TestClsString(JSONString: """
-        {"intToString":123,"boolToString":true,"floatToString":123.12,"nilToString":null}
+        {"intToString":123,"boolToString":true,"floatToString":123.000,"nilToString":null}
         """)
         let dataSrtSource = TestSrtString(JSONString: """
-        {"intToString":123,"boolToString":true,"floatToString":123.12,"nilToString":null}
+        {"intToString":123,"boolToString":true,"floatToString":123.000,"nilToString":null}
         """)
 
         XCTAssert(dataClsSource?.intToString != nil)
+        XCTAssertEqual(dataClsSource?.intToString, "123")
         XCTAssert(dataClsSource?.boolToString != nil)
+        XCTAssertEqual(dataClsSource?.boolToString, "1")
         XCTAssert(dataClsSource?.floatToString != nil)
+        XCTAssertEqual(dataClsSource?.floatToString, "123")
         XCTAssert(dataClsSource?.nilToString == nil)
+        XCTAssertEqual(dataClsSource?.nilToString, nil)
 
         XCTAssert(dataSrtSource?.intToString != nil)
+        XCTAssertEqual(dataSrtSource?.intToString, "123")
         XCTAssert(dataSrtSource?.boolToString != nil)
+        XCTAssertEqual(dataSrtSource?.boolToString, "1")
         XCTAssert(dataSrtSource?.floatToString != nil)
+        XCTAssertEqual(dataSrtSource?.floatToString, "123")
         XCTAssert(dataSrtSource?.nilToString == nil)
+        XCTAssertEqual(dataSrtSource?.nilToString, nil)
     }
 }

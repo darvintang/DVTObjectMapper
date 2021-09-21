@@ -6,27 +6,33 @@ import PackageDescription
 let package = Package(
     name: "DVTObjectMapper",
 
-    platforms: [.macOS(.v10_10),
-                .iOS(.v10),
-                .tvOS(.v9),
-                .watchOS(.v2)],
+    platforms: [
+        .macOS(.v10_12),
+        .iOS(.v10),
+        .tvOS(.v10),
+        .watchOS(.v3)
+    ],
 
     products: [
         .library(
             name: "DVTObjectMapper",
-            targets: ["DVTObjectMapper"]),
+            targets: ["DVTObjectMapper"]
+        ),
     ],
 
     targets: [
         .target(
             name: "DVTObjectMapper",
-            path: "Sources"),
+            path: "Sources"
+        ),
         .testTarget(
             name: "DVTObjectMapperTests",
-            dependencies: ["DVTObjectMapper"]),
+            dependencies: ["DVTObjectMapper"]
+        ),
         .testTarget(
             name: "ObjectMapperTests",
-            dependencies: ["DVTObjectMapper"]),
+            dependencies: ["DVTObjectMapper"]
+        ),
     ],
 
     swiftLanguageVersions: [.v5]

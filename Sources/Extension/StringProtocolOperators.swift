@@ -2,14 +2,14 @@
 //  StringProtocolOperators.swift
 //
 //
-//  Created by darvintang on 06/07/2019.
+//  Created by darvin on 06/07/2019.
 //
 
 /*
 
  MIT License
 
- Copyright (c) 2021 darvintang http://blog.tcoding.cn
+ Copyright (c) 2021 darvin http://blog.tcoding.cn
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

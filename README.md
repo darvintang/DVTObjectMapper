@@ -1,6 +1,6 @@
 # DVTObjectMapper
 
-[![CocoaPods](https://img.shields.io/cocoapods/v/DVTObjectMapper.svg)](https://github.com/darvintang/DVTObjectMapper)[![Swift Package Manager](https://rawgit.com/jlyonsmith/artwork/master/SwiftPackageManager/swiftpackagemanager-compatible.svg)](https://swift.org/package-manager/)[License](https://img.shields.io/cocoapods/l/DVTObjectMapper.svg?style=flat)](https://cocoapods.org/pods/DVTObjectMapper)[![Platform](https://img.shields.io/cocoapods/p/DVTObjectMapper.svg?style=flat)](https://cocoapods.org/pods/DVTObjectMapper)
+[![CocoaPods](https://img.shields.io/cocoapods/v/DVTObjectMapper.svg)](https://github.com/darvintang/DVTObjectMapper)[![Swift Package Manager](https://rawgit.com/jlyonsmith/artwork/master/SwiftPackageManager/swiftpackagemanager-compatible.svg)](https://swift.org/package-manager/)[![License](https://img.shields.io/cocoapods/l/DVTObjectMapper.svg?style=flat)](https://cocoapods.org/pods/DVTObjectMapper)[![Platform](https://img.shields.io/cocoapods/p/DVTObjectMapper.svg?style=flat)](https://cocoapods.org/pods/DVTObjectMapper)
 
 
 [DVTObjectMapper](https://github.com/darvintang/DVTObjectMapper) 是一个使用 Swift 编写的用于 model 对象（类和结构体）和 JSON  之间转换的框架。

@@ -7,15 +7,15 @@ let package = Package(
     name: "DVTObjectMapper",
 
     platforms: [
-        .macOS(.v10_12),
-        .iOS(.v10),
+        .macOS(.v10_14),
+        .iOS(.v12)
     ],
 
     products: [
         .library(
             name: "DVTObjectMapper",
             targets: ["DVTObjectMapper"]
-        ),
+        )
     ],
 
     targets: [
@@ -30,8 +30,6 @@ let package = Package(
         .testTarget(
             name: "ObjectMapperTests",
             dependencies: ["DVTObjectMapper"]
-        ),
-    ],
-
-    swiftLanguageVersions: [.v5]
+        )
+    ]
 )

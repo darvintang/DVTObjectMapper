@@ -1,6 +1,6 @@
 //
 //  BoolOperators.swift
-//
+//  DVTObjectMapper
 //
 //  Created by darvin on 2021/9/19.
 //
@@ -9,7 +9,7 @@
 
  MIT License
 
- Copyright (c) 2021 darvin http://blog.tcoding.cn
+ Copyright (c) 2022 darvin http://blog.tcoding.cn
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -44,24 +44,24 @@ extension ObjCBool: AllBoolProtocol {}
 /// AllBoolProtocol mapping
 public func <- <T: AllBoolProtocol>(left: inout T, right: Map) {
     switch right.mappingType {
-    case .fromJSON where right.isKeyPresent:
-        let value: T = toBoolProtocol(right.currentValue) ?? false
-        FromJSON.basicType(&left, object: value)
-    case .toJSON:
-        left >>> right
-    default: ()
+        case .fromJSON where right.isKeyPresent:
+            let value: T = toBoolProtocol(right.currentValue) ?? false
+            FromJSON.basicType(&left, object: value)
+        case .toJSON:
+            left >>> right
+        default: ()
     }
 }
 
 /// Optional AllBoolProtocol mapping
 public func <- <T: AllBoolProtocol>(left: inout T?, right: Map) {
     switch right.mappingType {
-    case .fromJSON where right.isKeyPresent:
-        let value: T? = toBoolProtocol(right.currentValue)
-        FromJSON.basicType(&left, object: value)
-    case .toJSON:
-        left >>> right
-    default: ()
+        case .fromJSON where right.isKeyPresent:
+            let value: T? = toBoolProtocol(right.currentValue)
+            FromJSON.basicType(&left, object: value)
+        case .toJSON:
+            left >>> right
+        default: ()
     }
 }
 

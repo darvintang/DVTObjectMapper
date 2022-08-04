@@ -1,6 +1,6 @@
 //
 //  IntegerOperators.swift
-//
+//  DVTObjectMapper
 //
 //  Created by darvin on 2021/9/19.
 //
@@ -9,7 +9,7 @@
 
  MIT License
 
- Copyright (c) 2021 darvin http://blog.tcoding.cn
+ Copyright (c) 2022 darvin http://blog.tcoding.cn
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,6 @@
 
  */
 
-
 import Foundation
 
 // MARK: - Signed Integer
@@ -39,24 +38,24 @@ import Foundation
 /// SignedInteger mapping
 public func <- <T: SignedInteger>(left: inout T, right: Map) {
     switch right.mappingType {
-    case .fromJSON where right.isKeyPresent:
-        let value: T = toSignedInteger(right.currentValue) ?? 0
-        FromJSON.basicType(&left, object: value)
-    case .toJSON:
-        left >>> right
-    default: ()
+        case .fromJSON where right.isKeyPresent:
+            let value: T = toSignedInteger(right.currentValue) ?? 0
+            FromJSON.basicType(&left, object: value)
+        case .toJSON:
+            left >>> right
+        default: ()
     }
 }
 
 /// Optional SignedInteger mapping
 public func <- <T: SignedInteger>(left: inout T?, right: Map) {
     switch right.mappingType {
-    case .fromJSON where right.isKeyPresent:
-        let value: T? = toSignedInteger(right.currentValue)
-        FromJSON.basicType(&left, object: value)
-    case .toJSON:
-        left >>> right
-    default: ()
+        case .fromJSON where right.isKeyPresent:
+            let value: T? = toSignedInteger(right.currentValue)
+            FromJSON.basicType(&left, object: value)
+        case .toJSON:
+            left >>> right
+        default: ()
     }
 }
 
@@ -65,24 +64,24 @@ public func <- <T: SignedInteger>(left: inout T?, right: Map) {
 /// UnsignedInteger mapping
 public func <- <T: UnsignedInteger>(left: inout T, right: Map) {
     switch right.mappingType {
-    case .fromJSON where right.isKeyPresent:
-        let value: T = toUnsignedInteger(right.currentValue) ?? 0
-        FromJSON.basicType(&left, object: value)
-    case .toJSON:
-        left >>> right
-    default: ()
+        case .fromJSON where right.isKeyPresent:
+            let value: T = toUnsignedInteger(right.currentValue) ?? 0
+            FromJSON.basicType(&left, object: value)
+        case .toJSON:
+            left >>> right
+        default: ()
     }
 }
 
 /// Optional UnsignedInteger mapping
 public func <- <T: UnsignedInteger>(left: inout T?, right: Map) {
     switch right.mappingType {
-    case .fromJSON where right.isKeyPresent:
-        let value: T? = toUnsignedInteger(right.currentValue)
-        FromJSON.basicType(&left, object: value)
-    case .toJSON:
-        left >>> right
-    default: ()
+        case .fromJSON where right.isKeyPresent:
+            let value: T? = toUnsignedInteger(right.currentValue)
+            FromJSON.basicType(&left, object: value)
+        case .toJSON:
+            left >>> right
+        default: ()
     }
 }
 

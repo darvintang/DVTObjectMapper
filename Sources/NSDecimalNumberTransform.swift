@@ -29,11 +29,10 @@
 import Foundation
 
 open class NSDecimalNumberTransform: TransformType {
-    public typealias Object = NSDecimalNumber
-    public typealias JSON = String
+    // MARK: Lifecycle
+    public init() { }
 
-    public init() {}
-
+    // MARK: Open
     open func transformFromJSON(_ value: Any?) -> NSDecimalNumber? {
         if let string = value as? String {
             return NSDecimalNumber(string: string)
@@ -49,4 +48,8 @@ open class NSDecimalNumberTransform: TransformType {
         guard let value = value else { return nil }
         return value.description
     }
+
+    // MARK: Public
+    public typealias Object = NSDecimalNumber
+    public typealias JSON = String
 }

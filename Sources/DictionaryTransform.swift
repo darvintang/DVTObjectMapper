@@ -28,9 +28,10 @@ import Foundation
 
 /// Transforms [String: AnyObject] <-> [Key: Value] where Key is RawRepresentable as String, Value is Mappable
 public struct DictionaryTransform<Key, Value>: TransformType where Key: Hashable, Key: RawRepresentable, Key.RawValue == String, Value: Mappable {
-    public init() {
-    }
+    // MARK: Lifecycle
+    public init() { }
 
+    // MARK: Public
     public func transformFromJSON(_ value: Any?) -> [Key: Value]? {
         guard let json = value as? [String: Any] else {
             return nil

@@ -30,11 +30,10 @@ import Foundation
 
 /// Transforms JSON dictionary to Codable type T and back
 open class CodableTransform<T: Codable>: TransformType {
-    public typealias Object = T
-    public typealias JSON = Any
+    // MARK: Lifecycle
+    public init() { }
 
-    public init() {}
-
+    // MARK: Open
     open func transformFromJSON(_ value: Any?) -> Object? {
         var _data: Data?
         switch value {
@@ -69,4 +68,8 @@ open class CodableTransform<T: Codable>: TransformType {
             return nil
         }
     }
+
+    // MARK: Public
+    public typealias Object = T
+    public typealias JSON = Any
 }

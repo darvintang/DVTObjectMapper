@@ -29,14 +29,10 @@
 import Foundation
 
 open class URLTransform: TransformType {
-    public typealias Object = URL
-    public typealias JSON = String
-    private let shouldEncodeURLString: Bool
-    private let allowedCharacterSet: CharacterSet
-
+    // MARK: Lifecycle
     /**
      Initializes the URLTransform with an option to encode URL strings before converting them to an NSURL
-     - parameter shouldEncodeUrlString: when true (the default) the string is encoded before passing
+     - parameter shouldEncodeURLString: when true (the default) the string is encoded before passing
      to `NSURL(string:)`
      - returns: an initialized transformer
      */
@@ -45,6 +41,7 @@ open class URLTransform: TransformType {
         self.allowedCharacterSet = allowedCharacterSet
     }
 
+    // MARK: Open
     open func transformFromJSON(_ value: Any?) -> URL? {
         guard let URLString = value as? String else { return nil }
 
@@ -64,4 +61,12 @@ open class URLTransform: TransformType {
         }
         return nil
     }
+
+    // MARK: Public
+    public typealias Object = URL
+    public typealias JSON = String
+
+    // MARK: Private
+    private let shouldEncodeURLString: Bool
+    private let allowedCharacterSet: CharacterSet
 }

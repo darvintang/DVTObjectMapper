@@ -29,11 +29,10 @@
 import Foundation
 
 open class EnumTransform<T: RawRepresentable>: TransformType {
-    public typealias Object = T
-    public typealias JSON = T.RawValue
+    // MARK: Lifecycle
+    public init() { }
 
-    public init() {}
-
+    // MARK: Open
     open func transformFromJSON(_ value: Any?) -> T? {
         if let raw = value as? T.RawValue {
             return T(rawValue: raw)
@@ -47,4 +46,8 @@ open class EnumTransform<T: RawRepresentable>: TransformType {
         }
         return nil
     }
+
+    // MARK: Public
+    public typealias Object = T
+    public typealias JSON = T.RawValue
 }

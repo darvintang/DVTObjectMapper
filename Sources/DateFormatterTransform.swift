@@ -29,15 +29,12 @@
 import Foundation
 
 open class DateFormatterTransform: TransformType {
-    public typealias Object = Date
-    public typealias JSON = String
-
-    public let dateFormatter: DateFormatter
-
+    // MARK: Lifecycle
     public init(dateFormatter: DateFormatter) {
         self.dateFormatter = dateFormatter
     }
 
+    // MARK: Open
     open func transformFromJSON(_ value: Any?) -> Date? {
         if let dateString = value as? String {
             return self.dateFormatter.date(from: dateString)
@@ -51,4 +48,10 @@ open class DateFormatterTransform: TransformType {
         }
         return nil
     }
+
+    // MARK: Public
+    public typealias Object = Date
+    public typealias JSON = String
+
+    public let dateFormatter: DateFormatter
 }

@@ -29,28 +29,12 @@
 import Foundation
 
 open class DateTransform: TransformType {
-    public typealias Object = Date
-    public typealias JSON = Double
-
-    public enum Unit: TimeInterval {
-        case seconds = 1
-        case milliseconds = 1000
-
-        func addScale(to interval: TimeInterval) -> TimeInterval {
-            return interval * rawValue
-        }
-
-        func removeScale(from interval: TimeInterval) -> TimeInterval {
-            return interval / rawValue
-        }
-    }
-
-    private let unit: Unit
-
+    // MARK: Lifecycle
     public init(unit: Unit = .seconds) {
         self.unit = unit
     }
 
+    // MARK: Open
     open func transformFromJSON(_ value: Any?) -> Date? {
         var timeInterval: TimeInterval?
         if let timeInt = value as? Double {
@@ -72,4 +56,25 @@ open class DateTransform: TransformType {
         }
         return nil
     }
+
+    // MARK: Public
+    public typealias Object = Date
+    public typealias JSON = Double
+
+    public enum Unit: TimeInterval {
+        case seconds = 1
+        case milliseconds = 1000
+
+        // MARK: Internal
+        func addScale(to interval: TimeInterval) -> TimeInterval {
+            return interval * rawValue
+        }
+
+        func removeScale(from interval: TimeInterval) -> TimeInterval {
+            return interval / rawValue
+        }
+    }
+
+    // MARK: Private
+    private let unit: Unit
 }

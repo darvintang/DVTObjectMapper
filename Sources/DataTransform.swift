@@ -29,11 +29,10 @@
 import Foundation
 
 open class DataTransform: TransformType {
-    public typealias Object = Data
-    public typealias JSON = String
+    // MARK: Lifecycle
+    public init() { }
 
-    public init() {}
-
+    // MARK: Open
     open func transformFromJSON(_ value: Any?) -> Data? {
         guard let string = value as? String else {
             return nil
@@ -47,4 +46,8 @@ open class DataTransform: TransformType {
         }
         return data.base64EncodedString()
     }
+
+    // MARK: Public
+    public typealias Object = Data
+    public typealias JSON = String
 }

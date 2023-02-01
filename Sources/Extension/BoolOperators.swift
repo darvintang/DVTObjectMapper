@@ -9,7 +9,7 @@
 
  MIT License
 
- Copyright (c) 2022 darvin http://blog.tcoding.cn
+ Copyright (c) 2023 darvin http://blog.tcoding.cn
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -33,11 +33,10 @@
 
 import Foundation
 
-public protocol AllBoolProtocol: ExpressibleByBooleanLiteral {
-}
+public protocol AllBoolProtocol: ExpressibleByBooleanLiteral { }
 
-extension Bool: AllBoolProtocol {}
-extension ObjCBool: AllBoolProtocol {}
+extension Bool: AllBoolProtocol { }
+extension ObjCBool: AllBoolProtocol { }
 
 // MARK: - AllBoolProtocol
 

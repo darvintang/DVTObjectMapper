@@ -37,9 +37,11 @@ public extension DateFormatter {
 }
 
 open class ISO8601DateTransform: DateFormatterTransform {
-    static let reusableISODateFormatter = DateFormatter(withFormat: "yyyy-MM-dd'T'HH:mm:ssZZZZZ", locale: "en_US_POSIX")
-
+    // MARK: Lifecycle
     public init() {
         super.init(dateFormatter: ISO8601DateTransform.reusableISODateFormatter)
     }
+
+    // MARK: Internal
+    static let reusableISODateFormatter = DateFormatter(withFormat: "yyyy-MM-dd'T'HH:mm:ssZZZZZ", locale: "en_US_POSIX")
 }

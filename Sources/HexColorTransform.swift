@@ -32,23 +32,13 @@
 
 #if os(iOS) || os(tvOS) || os(watchOS) || os(macOS)
     open class HexColorTransform: TransformType {
-        #if os(iOS) || os(tvOS) || os(watchOS)
-            public typealias Object = UIColor
-        #else
-            public typealias Object = NSColor
-        #endif
-
-        public typealias JSON = String
-
-        var prefix: Bool = false
-
-        var alpha: Bool = false
-
+        // MARK: Lifecycle
         public init(prefixToJSON: Bool = false, alphaToJSON: Bool = false) {
             self.alpha = alphaToJSON
             self.prefix = prefixToJSON
         }
 
+        // MARK: Open
         open func transformFromJSON(_ value: Any?) -> Object? {
             if let rgba = value as? String {
                 if rgba.hasPrefix("#") {
@@ -69,6 +59,21 @@
             return nil
         }
 
+        // MARK: Public
+        #if os(iOS) || os(tvOS) || os(watchOS)
+            public typealias Object = UIColor
+        #else
+            public typealias Object = NSColor
+        #endif
+
+        public typealias JSON = String
+
+        // MARK: Internal
+        var prefix = false
+
+        var alpha = false
+
+        // MARK: Fileprivate
         fileprivate func hexString(color: Object) -> String {
             let comps = color.cgColor.components!
             let compsCount = color.cgColor.numberOfComponents
@@ -85,7 +90,7 @@
                 g = Int(comps[0] * 255)
                 b = Int(comps[0] * 255)
             }
-            var hexString: String = ""
+            var hexString = ""
             if self.prefix {
                 hexString = "#"
             }

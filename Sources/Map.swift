@@ -29,24 +29,11 @@
 import Foundation
 
 /// MapContext is available for developers who wish to pass information around during the mapping process.
-public protocol MapContext {
-}
+public protocol MapContext { }
 
 /// A class used for holding mapping data
 public final class Map {
-    public let mappingType: MappingType
-
-    public internal(set) var JSON: [String: Any] = [:]
-    public internal(set) var isKeyPresent = false
-    public internal(set) var currentValue: Any?
-    public internal(set) var currentKey: String?
-    var keyIsNested = false
-    public internal(set) var nestedKeyDelimiter: String = "."
-    public var context: MapContext?
-    public var shouldIncludeNilValues = false /// If this is set to true, toJSON output will include null values for any variables that are not set.
-
-    public let toObject: Bool // indicates whether the mapping is being applied to an existing object
-
+    // MARK: Lifecycle
     public init(mappingType: MappingType, JSON: [String: Any], toObject: Bool = false, context: MapContext? = nil, shouldIncludeNilValues: Bool = false) {
         self.mappingType = mappingType
         self.JSON = JSON
@@ -54,6 +41,19 @@ public final class Map {
         self.context = context
         self.shouldIncludeNilValues = shouldIncludeNilValues
     }
+
+    // MARK: Public
+    public let mappingType: MappingType
+
+    public internal(set) var JSON: [String: Any] = [:]
+    public internal(set) var isKeyPresent = false
+    public internal(set) var currentValue: Any?
+    public internal(set) var currentKey: String?
+    public internal(set) var nestedKeyDelimiter = "."
+    public var context: MapContext?
+    public var shouldIncludeNilValues = false // If this is set to true, toJSON output will include null values for any variables that are not set.
+
+    public let toObject: Bool // indicates whether the mapping is being applied to an existing object
 
     /// Sets the current mapper value and key.
     /// The Key paramater can be a period separated string (ex. "distance.value") to access sub objects.
@@ -90,6 +90,34 @@ public final class Map {
         return self.subscript(key: key, nested: nested, delimiter: delimiter, ignoreNil: ignoreNil)
     }
 
+    public func value<T>() -> T? {
+        let value = self.currentValue as? T
+
+        // Swift 4.1 breaks Float casting from `NSNumber`. So Added extra checks for `Float` `[Float]` and `[String:Float]`
+        if value == nil && T.self == Float.self {
+            if let v = currentValue as? NSNumber {
+                return v.floatValue as? T
+            }
+        } else if value == nil && T.self == [Float].self {
+            if let v = currentValue as? [Double] {
+                #if swift(>=4.1)
+                    return v.compactMap { Float($0) } as? T
+                #else
+                    return v.flatMap { Float($0) } as? T
+                #endif
+            }
+        } else if value == nil && T.self == [String: Float].self {
+            if let v = currentValue as? [String: Double] {
+                return v.mapValues { Float($0) } as? T
+            }
+        }
+        return value
+    }
+
+    // MARK: Internal
+    var keyIsNested = false
+
+    // MARK: Private
     private func `subscript`(key: String, nested: Bool? = nil, delimiter: String = ".", ignoreNil: Bool = false) -> Map {
         // save key and value associated to it
         self.currentKey = key
@@ -116,30 +144,6 @@ public final class Map {
         }
 
         return self
-    }
-
-    public func value<T>() -> T? {
-        let value = self.currentValue as? T
-
-        // Swift 4.1 breaks Float casting from `NSNumber`. So Added extra checks for `Float` `[Float]` and `[String:Float]`
-        if value == nil && T.self == Float.self {
-            if let v = currentValue as? NSNumber {
-                return v.floatValue as? T
-            }
-        } else if value == nil && T.self == [Float].self {
-            if let v = currentValue as? [Double] {
-                #if swift(>=4.1)
-                    return v.compactMap { Float($0) } as? T
-                #else
-                    return v.flatMap { Float($0) } as? T
-                #endif
-            }
-        } else if value == nil && T.self == [String: Float].self {
-            if let v = currentValue as? [String: Double] {
-                return v.mapValues { Float($0) } as? T
-            }
-        }
-        return value
     }
 }
 
@@ -179,7 +183,7 @@ private func valueFor(_ keyPathComponents: ArraySlice<String>, array: [Any]) -> 
 
     // Try to convert keypath to Int as index
     if let keyPath = keyPathComponents.first,
-       let index = Int(keyPath), index >= 0 && index < array.count {
+       let index = Int(keyPath), index >= 0, index < array.count {
         let isTail = keyPathComponents.count == 1
         let object = array[index]
 

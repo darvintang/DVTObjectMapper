@@ -42,7 +42,8 @@ public protocol Mappable: BaseMappable {
 public protocol StaticMappable: BaseMappable {
     /// This is function that can be used to:
     ///		1) provide an existing cached object to be used for mapping
-    ///		2) return an object of another class (which conforms to BaseMappable) to be used for mapping. For instance, you may inspect the JSON to infer the type of object that should be used for any given mapping
+    ///		2) return an object of another class (which conforms to BaseMappable) to be used for mapping. For instance, you may inspect the JSON to infer the type
+    /// of object that should be used for any given mapping
     static func objectForMapping(map: Map) -> BaseMappable?
 }
 
@@ -79,6 +80,7 @@ public extension BaseMappable {
 }
 
 public extension Array where Element: BaseMappable {
+    // MARK: Lifecycle
     /// Initialize Array from a JSON String
     init?(JSONString: String, context: MapContext? = nil) {
         if let obj: [Element] = Mapper(context: context).mapArray(JSONString: JSONString) {
@@ -94,6 +96,7 @@ public extension Array where Element: BaseMappable {
         self = obj
     }
 
+    // MARK: Internal
     /// Returns the JSON Array
     func toJSON() -> [[String: Any]] {
         return Mapper().toJSONArray(self)
@@ -106,6 +109,7 @@ public extension Array where Element: BaseMappable {
 }
 
 public extension Set where Element: BaseMappable {
+    // MARK: Lifecycle
     /// Initializes a set from a JSON String
     init?(JSONString: String, context: MapContext? = nil) {
         if let obj: Set<Element> = Mapper(context: context).mapSet(JSONString: JSONString) {
@@ -123,6 +127,7 @@ public extension Set where Element: BaseMappable {
         self = obj
     }
 
+    // MARK: Internal
     /// Returns the JSON Set
     func toJSON() -> [[String: Any]] {
         return Mapper().toJSONSet(self)

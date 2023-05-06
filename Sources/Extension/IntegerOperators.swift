@@ -36,10 +36,23 @@ import Foundation
 // MARK: - Signed Integer
 
 /// SignedInteger mapping
+public func <<< <T: SignedInteger>(left: inout T, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toInteger(right.currentValue)
+        FromJSON.basicType(&left, object: value ?? 0)
+    }
+}
+
+/// SignedInteger mapping
 public func <- <T: SignedInteger>(left: inout T, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
+
+/// Optional SignedInteger mapping
+public func <<< <T: SignedInteger>(left: inout T?, right: Map) {
     switch right.mappingType {
         case .fromJSON where right.isKeyPresent:
-            let value: T = toSignedInteger(right.currentValue) ?? 0
+            let value: T? = T.toInteger(right.currentValue)
             FromJSON.basicType(&left, object: value)
         case .toJSON:
             left >>> right
@@ -49,40 +62,35 @@ public func <- <T: SignedInteger>(left: inout T, right: Map) {
 
 /// Optional SignedInteger mapping
 public func <- <T: SignedInteger>(left: inout T?, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T? = toSignedInteger(right.currentValue)
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
-    }
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
 }
 
 // MARK: - Unsigned Integer
 
 /// UnsignedInteger mapping
-public func <- <T: UnsignedInteger>(left: inout T, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T = toUnsignedInteger(right.currentValue) ?? 0
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: UnsignedInteger>(left: inout T, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toInteger(right.currentValue)
+        FromJSON.basicType(&left, object: value ?? 0)
     }
 }
 
 /// Optional UnsignedInteger mapping
-public func <- <T: UnsignedInteger>(left: inout T?, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T? = toUnsignedInteger(right.currentValue)
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: UnsignedInteger>(left: inout T?, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toInteger(right.currentValue)
+        FromJSON.basicType(&left, object: value)
     }
+}
+
+/// UnsignedInteger mapping
+public func <- <T: UnsignedInteger>(left: inout T, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
+
+/// Optional UnsignedInteger mapping
+public func <- <T: UnsignedInteger>(left: inout T?, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
 }
 
 // MARK: - Casting Utils
@@ -100,15 +108,20 @@ private func toSignedInteger<T: SignedInteger>(_ value: Any?) -> T? {
     return T(exactly: number.int64Value)
 }
 
-/// Convert any value to `UnsignedInteger`.
-private func toUnsignedInteger<T: UnsignedInteger>(_ value: Any?) -> T? {
-    guard
-        case let number as NSNumber = value
-    else {
-        if case let stringValue as String = value, let tempUInt64 = UInt64(stringValue) {
-            return T(exactly: tempUInt64)
+public extension BinaryInteger {
+    static func toInteger(_ value: Any?) -> Self? {
+        var resNumber: NSNumber = 0
+        if case let number as NSNumber = value {
+            resNumber = number
+        } else if case let stringValue as String = value, let tempValue = Double(stringValue) {
+            resNumber = NSNumber(value: tempValue)
+        } else {
+            return nil
         }
-        return nil
+        if self.isSigned {
+            return Self(exactly: resNumber.int64Value)
+        } else {
+            return Self(exactly: resNumber.uint64Value)
+        }
     }
-    return T(exactly: number.uint64Value)
 }

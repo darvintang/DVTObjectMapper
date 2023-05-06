@@ -36,41 +36,44 @@ import Foundation
 // MARK: - BinaryFloatingPoint
 
 /// BinaryFloatingPoint mapping
-public func <- <T: BinaryFloatingPoint>(left: inout T, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T = toFloatPoint(right.currentValue) ?? 0.0
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: BinaryFloatingPoint>(left: inout T, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toFloatPoint(right.currentValue)
+        FromJSON.basicType(&left, object: value ?? 0)
     }
 }
 
 /// Optional BinaryFloatingPoint mapping
-public func <- <T: BinaryFloatingPoint>(left: inout T?, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T? = toFloatPoint(right.currentValue)
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: BinaryFloatingPoint>(left: inout T?, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toFloatPoint(right.currentValue)
+        FromJSON.basicType(&left, object: value)
     }
+}
+
+/// BinaryFloatingPoint mapping
+public func <- <T: BinaryFloatingPoint>(left: inout T, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
+
+/// Optional BinaryFloatingPoint mapping
+public func <- <T: BinaryFloatingPoint>(left: inout T?, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
 }
 
 // MARK: - Casting Utils
 
 /// Convert any value to `BinaryFloatingPoint`.
-private func toFloatPoint<T: BinaryFloatingPoint>(_ value: Any?) -> T? {
-    guard
-        case let number as NSNumber = value
-    else {
-        if case let stringValue as String = value, let tempDouble = Double(stringValue) {
-            return T(tempDouble)
+public extension BinaryFloatingPoint {
+    static func toFloatPoint(_ value: Any?) -> Self? {
+        guard
+            case let number as NSNumber = value
+        else {
+            if case let stringValue as String = value, let tempDouble = Double(stringValue) {
+                return Self(tempDouble)
+            }
+            return nil
         }
-        return nil
+        return Self(number.doubleValue)
     }
-
-    return T(number.doubleValue)
 }

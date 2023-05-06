@@ -42,41 +42,42 @@ extension Substring: AllStringProtocol { }
 // MARK: - AllStringProtocol
 
 /// AllStringProtocol mapping
-public func <- <T: AllStringProtocol>(left: inout T, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T = toStringProtocol(right.currentValue) ?? ""
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: AllStringProtocol>(left: inout T, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toString(right.currentValue)
+        FromJSON.basicType(&left, object: value ?? "")
     }
 }
 
 /// Optional AllStringProtocol mapping
-public func <- <T: AllStringProtocol>(left: inout T?, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T? = toStringProtocol(right.currentValue)
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: AllStringProtocol>(left: inout T?, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toString(right.currentValue)
+        FromJSON.basicType(&left, object: value)
     }
 }
 
+/// AllStringProtocol mapping
+public func <- <T: AllStringProtocol>(left: inout T, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
+
+/// Optional AllStringProtocol mapping
+public func <- <T: AllStringProtocol>(left: inout T?, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
+
 // MARK: - Casting Utils
-
-/// Convert any value to `AllStringProtocol`.
-private func toStringProtocol<T: AllStringProtocol>(_ value: Any?) -> T? {
-    guard
-        case let stringValue as String = value
-    else {
-        if let tempValue = value {
-            return "\(tempValue)" as? T
+public extension AllStringProtocol {
+    static func toString(_ value: Any?) -> Self? {
+        guard
+            case let stringValue as String = value
+        else {
+            if let tempValue = value {
+                return "\(tempValue)" as? Self
+            }
+            return nil
         }
-        return nil
+        return stringValue as? Self
     }
-
-    return stringValue as? T
 }

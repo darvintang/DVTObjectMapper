@@ -36,40 +36,37 @@ import Foundation
 // MARK: - Decimal
 
 /// Decimal mapping
-public func <- (left: inout Decimal, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value = toDecimal(right.currentValue) ?? 0
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< (left: inout Decimal, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value = Decimal.toDecimal(right.currentValue) ?? 0
+        FromJSON.basicType(&left, object: value)
     }
 }
 
 /// Optional Decimal mapping
-public func <- (left: inout Decimal?, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value = toDecimal(right.currentValue)
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< (left: inout Decimal?, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value = Decimal.toDecimal(right.currentValue)
+        FromJSON.basicType(&left, object: value)
     }
 }
 
-// MARK: - Casting Utils
+public func <- (left: inout Decimal, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
 
-private func toDecimal(_ value: Any?) -> Decimal? {
-    guard
-        case let decimalValue as Decimal = value
-    else {
-        if let tempValue = value {
+public func <- (left: inout Decimal?, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
+
+// MARK: - Casting Utils
+public extension Decimal {
+    static func toDecimal(_ value: Any?) -> Decimal? {
+        if let decimalValue = value as? Decimal {
+            return decimalValue
+        } else if let tempValue = value {
             return Decimal(string: "\(tempValue)")
         }
         return nil
     }
-
-    return decimalValue
 }

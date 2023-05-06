@@ -41,43 +41,45 @@ extension ObjCBool: AllBoolProtocol { }
 // MARK: - AllBoolProtocol
 
 /// AllBoolProtocol mapping
-public func <- <T: AllBoolProtocol>(left: inout T, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T = toBoolProtocol(right.currentValue) ?? false
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: AllBoolProtocol>(left: inout T, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toBool(right.currentValue)
+        FromJSON.basicType(&left, object: value ?? false)
     }
 }
 
 /// Optional AllBoolProtocol mapping
-public func <- <T: AllBoolProtocol>(left: inout T?, right: Map) {
-    switch right.mappingType {
-        case .fromJSON where right.isKeyPresent:
-            let value: T? = toBoolProtocol(right.currentValue)
-            FromJSON.basicType(&left, object: value)
-        case .toJSON:
-            left >>> right
-        default: ()
+public func <<< <T: AllBoolProtocol>(left: inout T?, right: Map) {
+    if right.mappingType == .fromJSON, right.isKeyPresent {
+        let value: T? = T.toBool(right.currentValue)
+        FromJSON.basicType(&left, object: value)
     }
+}
+
+/// AllBoolProtocol mapping
+public func <- <T: AllBoolProtocol>(left: inout T, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
+}
+
+/// Optional AllBoolProtocol mapping
+public func <- <T: AllBoolProtocol>(left: inout T?, right: Map) {
+    right.mappingType == .fromJSON ? left <<< right : left >>> right
 }
 
 // MARK: - Casting Utils
 
 /// Convert any value to `AllBoolProtocol`.
-private func toBoolProtocol<T: AllBoolProtocol>(_ value: Any?) -> T? {
-    guard
-        case let boolValue as Bool = value
-    else {
-        if let tempValue = value as? String {
-            if let index = ["yes", "no", "true", "false", "1", "0"].firstIndex(of: tempValue.lowercased()) {
-                return (index % 2 == 0) as? T
+public extension AllBoolProtocol {
+    static func toBool(_ value: Any?) -> Self? {
+        if case let boolValue as Bool = value {
+            return boolValue as? Self
+        } else {
+            if let tempValue = value as? String, let index = ["yes", "no", "true", "false", "1", "0"].firstIndex(of: tempValue.lowercased()) {
+                return (index % 2 == 0) as? Self
+            } else if let tempValue = value as? NSNumber {
+                return (tempValue != 0) as? Self
             }
         }
         return nil
     }
-
-    return boolValue as? T
 }
